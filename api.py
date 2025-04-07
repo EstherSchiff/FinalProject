@@ -37,4 +37,7 @@ def get_secret_card():
     mycards = draw_cards(deck_id)
     mycards = mycards.json()
     cards = mycards["cards"]
-    return cards[0]["code"]
+    result = cards[0]["code"]
+    if "0" in result:
+        result = result.replace("0", "10")  # api returns 0 for 10
+    return result
