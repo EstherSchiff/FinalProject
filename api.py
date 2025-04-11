@@ -1,5 +1,12 @@
 import requests
-import sys
+
+# custom errors
+class DrawCardError(Exception):
+    pass
+
+
+class CreateDeckError(Exception):
+    pass
 
 
 # request to create a deck, returns the deck ID
@@ -9,11 +16,9 @@ def create_deck():
             "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
         request.raise_for_status()
     except requests.HTTPError:
-        sys.exit("Couldn't complete request!")
-
-    # if request is not successful
-    if not request.ok:
-        sys.exit('There was an error creating the deck of cards.')
+        raise CreateDeckError("There was a problem creating the deck.")
+    if not request.json().get('success', True):  # If 'success' is False
+        raise CreateDeckError("There was a problem creating the deck.")
     return request.json()["deck_id"]
 
 
@@ -24,14 +29,12 @@ def draw_cards(deck_id):
             f"https://deckofcardsapi.com/api/deck/{deck_id}/draw/?count={1}")
         request.raise_for_status()
     except requests.HTTPError:
-        sys.exit("Couldn't complete request!")
-
-    # if request is not successful
-    if not request.ok:
-        sys.exit('There was an error drawing a card.')
+        raise DrawCardError("There was a problem drawing a card.")
+    if not request.json().get('success', True):  # If success is false
+        raise DrawCardError("There was a problem drawing a card.")
     return request
 
-
+# uses create and draw to get one secret card
 def get_secret_card():
     deck_id = create_deck()
     mycards = draw_cards(deck_id)

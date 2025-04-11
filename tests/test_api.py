@@ -1,11 +1,11 @@
+import sys
+import os
 from unittest.mock import Mock
 import pytest
 from api import create_deck, draw_cards, get_secret_card, CreateDeckError, DrawCardError
 
-# to get pytest to find the api file
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+# Add the root directory to the system path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 @pytest.fixture
