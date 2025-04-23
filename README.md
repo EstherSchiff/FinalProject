@@ -27,8 +27,9 @@ Streamlit should launch automatically in your browser. If not, you can view it h
 
 
 ## Run Streamlit via Deployment
-**You can access the deployed version here:** (https://your-app.streamlit.app)
+**You can access the deployed version here:** (https://FinalProject.streamlit.app)
 
+## Deploy Streamlit App Yourself
 **Clone the repository:**
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
