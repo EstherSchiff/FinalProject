@@ -7,17 +7,23 @@ To set up your environment and run the code locally:
 
 ## Run Streamlit Locally
 **Open the terminal and run the following:**
-    ```bash
-    git clone https://github.com/EstherSchiff/FinalProject.git
-    cd FinalProject
-    ```
+```bash
+git clone https://github.com/EstherSchiff/FinalProject.git
+cd FinalProject
+```
 **Set up a virtual environment (optional) on Windows:**
-    python -m venv .venv
-    source .venv\Scripts\activate
+```bash
+python -m venv .venv
+source .venv\Scripts\activate
+```
 **Install dependencies:**
-    pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 **Run the app:**
-    streamlit run play.py
+```bash
+streamlit run play.py
+```
 **Launch**
 Streamlit should launch automatically in your browser. If not, you can view it here: http://localhost:8501
 
