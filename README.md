@@ -27,18 +27,34 @@ Streamlit should launch automatically in your browser. If not, you can view it h
 
 
 ## Run Streamlit via Deployment
-Visit https://EstherSchiff.streamlit.app
-1. **Clone the repository:**
+**You can access the deployed version here:** (https://your-app.streamlit.app)
+
+**Clone the repository:**
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
 ```
-2. Visit https://streamlit.io/cloud and sign in with your Github account.
-3. Create a new app
-4. Select the Github repo and branch
-5. Set the main file to ```play.py```
-6. Click ```Deploy```
-To set up your environment and run the code locally:
+**Sign in to Streamlit**
+Visit https://streamlit.io/cloud and sign in with your Github account.
+
+**Create a new app:**
+- Click ```new app```
+- Select the Github repo and branch
+- Set the main file to ```play.py```
+- Click ```Deploy```
 
 Badge (coverage or tests passing):
 
-This application requires ___________. You can install them by ____________.
+## Dependencies
+```bash
+streamlit
+pandas
+openai
+requests
+beautifulsoup4
+pytest-cov
+pytest
+```
+**To install:**
+```bash
+pip install -r requirements.txt
+```
