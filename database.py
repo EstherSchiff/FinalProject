@@ -15,11 +15,11 @@ def init_db():
     conn.close()
 
 # insert a card into the database
-def insert_card(unicode, name):
-    conn = sqlite3.connect(db)
+def insert_card(unicode, name, db_name=db):
+    conn = sqlite3.connect(db_name)
     c = conn.cursor()
     code = get_code(name)
-    c.execute("INSERT OR IGNORE INTO cards (code, unicode, name) VALUES (?,?, ?)",
+    c.execute("INSERT OR IGNORE INTO cards (code, unicode, name) VALUES (?,?,?)",
               (code, unicode, name))
     conn.commit()
     conn.close()
