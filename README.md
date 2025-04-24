@@ -27,12 +27,12 @@ Streamlit should launch automatically in your browser. If not, you can view it h
 
 
 ## Run Streamlit via Deployment
-**You can access the deployed version here:** (https://FinalProject.streamlit.app)
+**You can access the deployed version here:** (https://cardguesser.streamlit.app)
 
 ## Deploy Streamlit App Yourself
 **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/EstherSchiff/FinalProject.git
 ```
 **Sign in to Streamlit**
 Visit https://streamlit.io/cloud and sign in with your Github account.
@@ -42,6 +42,9 @@ Visit https://streamlit.io/cloud and sign in with your Github account.
 - Select the Github repo and branch
 - Set the main file to ```play.py```
 - Click ```Deploy```
+
+**Adding an API Key**
+Visit https://share.streamlit.io/. Click on the dots for more options. Got to settings>secrets and add you API KEY in this format: 
 
 Badge (coverage or tests passing):
 

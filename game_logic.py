@@ -3,18 +3,9 @@ from database import init_db, reset_db, update_card, code_to_words, get_guessed_
 from scrape import scrape_cards
 from api import get_secret_card
 from ai import encourage
-from plot import draw_pie_chart
+from card_helpers import codes_to_symbols, get_card_code
+# from plot import draw_pie_chart
 
-# converts a letter code to symbol code
-def codes_to_symbols(card_codes):
-    reverse_suit_dict = {'S': '♤', 'H': '♡', 'D': '♢', 'C': '♧'}
-    card_symbols = []
-    for code in card_codes:
-        num = code[:-1]
-        letter = code[-1]
-        symbol = reverse_suit_dict[letter]
-        card_symbols.append(num + symbol)
-    return card_symbols
 
 # displays guessed cards
 def display_data():
@@ -25,12 +16,6 @@ def display_data():
         st.write("Guessed cards: ")
     with col2:
         st.write(", ".join(card_symbols))
-
-# converts symbol code to letter code
-def get_card_code(value, suit):
-    suit_dict = {'♤': 'S', '♡': 'H', '♢': 'D', '♧': 'C'}
-    # build guess
-    return value + suit_dict[suit]
 
 # called when the user guesses correctly
 def win():

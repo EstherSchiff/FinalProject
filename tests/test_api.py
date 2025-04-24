@@ -2,7 +2,7 @@ import sys
 import os
 from unittest.mock import Mock
 import pytest
-from api import create_deck, draw_cards, get_secret_card, CreateDeckError, DrawCardError
+from api_helpers import create_deck, draw_cards, get_secret_card, CreateDeckError, DrawCardError
 
 # Add the root directory to the system path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

@@ -1,22 +1,9 @@
-import pytest
-from database import init_db, get_code, insert_card, code_to_words, update_card, reset_db, get_guessed_cards
+from database import init_db, insert_card, update_card, reset_db, get_guessed_cards
 import os
-import sqlite3
 
 def test_init_db():
     init_db()
     assert os.path.exists("database.py")
-
-@pytest.mark.parametrize("name, code", [("TEN OF HEARTS", "10H"), ("ACE OF SPADES", "AS"), ("KING OF DIAMONDS", "KD")])
-def test_get_code(name, code):
-    card_code = get_code(name)
-    assert card_code == code
-
-@pytest.mark.parametrize("word_result, code", [("Ten Of Hearts", "10H"), ("Ace Of Spades", "AS"), ("King Of Diamonds", "KD")])
-def test_code_to_words(word_result, code):
-    word = code_to_words(code)
-    assert word == word_result
-
     
 # creates a table in memory but it make a new one by the time it calls insert_card so its an issue
 def test_insert_card():

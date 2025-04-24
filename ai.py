@@ -1,7 +1,7 @@
 import streamlit as st
 from openai import AzureOpenAI
 
-# function to display an encouraging message to user using ChatGPT
+# function to display an encouraging message to user using AI
 def encourage():
     client = AzureOpenAI(
         api_key=st.secrets["api_keys"]["API_KEY"],

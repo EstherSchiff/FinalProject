@@ -3,6 +3,5 @@ pandas
 openai
 requests
 beautifulsoup4
-matplotlib
 pytest-cov
 pytest
