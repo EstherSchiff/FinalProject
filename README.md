@@ -46,7 +46,8 @@ Visit https://streamlit.io/cloud and sign in with your Github account.
 **Adding an API Key**
 Visit https://share.streamlit.io/. Click on the dots for more options. Got to settings>secrets and add you API KEY in this format: 
 
-Badge (coverage or tests passing):
+##Badges
+![Tests](https://github.com/EstherSchiff/FinalProject/actions/workflows/tests.yml/badge.svg)
 
 ## Dependencies
 ```bash
