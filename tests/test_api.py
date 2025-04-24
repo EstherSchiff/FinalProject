@@ -2,10 +2,11 @@ import sys
 import os
 from unittest.mock import Mock
 import pytest
-from api_helpers import create_deck, draw_cards, get_secret_card, CreateDeckError, DrawCardError
+from api_helpers import create_deck, draw_cards, CreateDeckError, DrawCardError
+from api import get_secret_card
 
-# Add the root directory to the system path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# # Add the root directory to the system path
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 @pytest.fixture
@@ -60,7 +61,7 @@ def mock_requests_get(mocker):
     A fixture that patches requests.get via pytest-mock (mocker).
     Returns the mock object so you can configure it within tests.
     """
-    return mocker.patch("api.requests.get")
+    return mocker.patch("requests.get")
 
 
 def test_create_deck(simple_api_response, mock_requests_get):
