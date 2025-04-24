@@ -1,9 +1,9 @@
 import streamlit as st
-from database import init_db, reset_db, update_card, code_to_words, get_guessed_cards
+from database import init_db, reset_db, update_card, get_guessed_cards
 from scrape import scrape_cards
 from api import get_secret_card
 from ai import encourage
-from card_helpers import codes_to_symbols, get_card_code
+from card_helpers import codes_to_symbols, get_card_code, code_to_words
 # from plot import draw_pie_chart
 
 
