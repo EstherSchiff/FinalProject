@@ -1,5 +1,5 @@
 import sqlite3
-
+db="cards.db"
 # converts word form to code form
 def get_code(name):
     value_to_code = {
@@ -14,7 +14,7 @@ def get_code(name):
     return value_to_code[value] + suit_to_code[suit]
 
 # converts code form back to word form
-def code_to_words(code, db):
+def code_to_words(code):
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM cards WHERE code = ?", (code,))
