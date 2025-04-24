@@ -23,4 +23,4 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest --cov  # add any pytest options you use
+        pytest /test --cov
