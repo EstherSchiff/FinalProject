@@ -4,8 +4,6 @@ from scrape import scrape_cards
 from api import get_secret_card
 from ai import encourage
 from card_helpers import codes_to_symbols, get_card_code, code_to_words
-# from plot import draw_pie_chart
-
 
 # displays guessed cards
 def display_data():
@@ -26,7 +24,7 @@ def win():
 # called when the user runs out of guesses
 def lose():
     st.session_state["guess_disabled"] = True
-    st.session_state["lose_message"] = f'You ran out of guesses! The card was {code_to_words(st.session_state['secret_card'])}. Press New Game to play again.'
+    st.session_state["lose_message"] = f'You ran out of guesses! The card was {code_to_words(st.session_state["secret_card"])}. Press New Game to play again.'
     st.rerun()
 
 # loads the sidebar to enter a guess
@@ -68,21 +66,24 @@ def continue_game(card_code):
 # gives the user an encouraging message from AI
 def ai():
     if "win_message" not in st.session_state and "lose_message" not in st.session_state:
-        st.write(encourage())
+        st.write(encourage(st.session_state["guesses_left"]))
 
-# displays a progress bar showing how far the game progressed and how many guesses left
+def calc_used_guesses():
+    return 5 - st.session_state["guesses_left"]
+
+def calc_progress_fraction(used):
+    return used / 5
+
+# displays a progress bar showing how far the game progressed
 def progress_bar():
     if "win_message" not in st.session_state and "lose_message" not in st.session_state:
-        total_guesses = 5
-        used_guesses = total_guesses - st.session_state["guesses_left"]
-        progress = used_guesses / total_guesses
+        used_guesses = calc_used_guesses()
+        progress = calc_progress_fraction(used_guesses)
         col1, col2 = st.columns([2, 8])
         with col1:
-            st.write("Guesses remaining: ")
             st.write("Game progress: ")
         st.session_state["progress"] = progress  # Store the progress in session state
         with col2:
-            st.write("🟢 " * st.session_state["guesses_left"])
             st.progress(st.session_state["progress"])
 
 # initializes session state variables
@@ -114,7 +115,7 @@ def initialize_game():
 # displays a winning or losing message or the cards already guessed
 def display_messages():
     if "lose_message" in st.session_state:
-        st.success(st.session_state["lose_message"])
+        st.error(st.session_state["lose_message"])
     elif "win_message" in st.session_state:
         st.success(st.session_state["win_message"])
         st.balloons()

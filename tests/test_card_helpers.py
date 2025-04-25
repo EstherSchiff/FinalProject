@@ -8,7 +8,7 @@ def test_get_code(name, code):
 
 @pytest.mark.parametrize("word_result, code", [("Ten Of Hearts", "10H"), ("Ace Of Spades", "AS"), ("King Of Diamonds", "KD")])
 def test_code_to_words(word_result, code):
-    word = code_to_words(code, "cards.db")
+    word = code_to_words(code)
     assert word == word_result
 
 @pytest.mark.parametrize("letter_code, symbol_code", [(["AS", "2C", "JD", "10H"], ["A♤", "2♧", "J♢", "10♡"])])
