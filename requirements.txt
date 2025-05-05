@@ -1,5 +1,6 @@
 beautifulsoup4
 emoji
+matplotlib
 openai
 pytest
 pytest-cov
