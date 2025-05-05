@@ -2,6 +2,7 @@ from ai import encourage
 from unittest.mock import patch
 from emoji import is_emoji
 
+# tests ai response using mocking
 @patch("ai.AzureOpenAI")
 def test_encourage(mock_azure):
     mock_azure.return_value.chat.completions.create.return_value = ["You're doing great! You have 2 guesses left. 😊"]
