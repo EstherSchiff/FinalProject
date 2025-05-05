@@ -1,6 +1,9 @@
 from scrape_helpers import get_html, get_table, extract_data, insert_data, URLError
+from unittest.mock import patch
 import pytest
 import requests
+from scrape import scrape_cards
+from tests.test_database import memory_db
 
 
 @pytest.fixture
@@ -21,6 +24,17 @@ def mock_html():
     </html>
     """
 
+@pytest.fixture
+def mock_table():
+    return """
+    <table class="wikitable nounderlines Unicode">
+            <tr>
+                <td title="U+1F0A1: PLAYING CARD ACE OF SPADES">🂡</td>
+                <td title="U+1F0B8: PLAYING CARD EIGHT OF CLUBS">🂸</td>
+                <td title="U+1F0C1: PLAYING CARD ACE OF DIAMONDS">🃁</td>
+            </tr>
+    </table>
+    """
 def test_get_html_success(mocker, mock_html):
     # Create a mock response object
     mock_response = mocker.Mock()
@@ -76,11 +90,24 @@ def test_extract_data(mocker, mock_html, keyword):
     result = extract_data(table)
     assert keyword not in result
 
-# how do I do this?
-def test_insert_data():
-    # insert_data()
-    pass
+def test_insert_data(memory_db):
+    cards_data = [
+        ('U+1F0C2', 'TWO OF DIAMONDS'),
+        ('U+1F0C3', 'THREE OF DIAMONDS'),
+    ]
+    with patch("database.get_code", side_effect=["2D", "3D"]):
+        insert_data(cards_data, memory_db)
+        guessed_values = memory_db.execute("SELECT unicode, name FROM cards").fetchall()
+        assert ('U+1F0C2', 'TWO OF DIAMONDS') in guessed_values
+        assert ('U+1F0C3', 'THREE OF DIAMONDS') in guessed_values
 
-# needed??
-def test_scrape_cards():
-    pass
+
+@patch('scrape_helpers.insert_card')
+@patch('scrape.get_html', return_value=mock_html)
+@patch('scrape.get_table', return_value=mock_table)
+@patch('scrape.extract_data', return_value=[('U+1F0A1', 'ACE OF SPADES'), ('U+1F0B8', 'EIGHT OF CLUBS'), ('U+1F0C1', 'ACE OF DIAMONDS')])
+def test_scrape_cards(mock_extract_data, mock_get_table, mock_get_html, mock_insert, memory_db):
+    scrape_cards(memory_db)
+    mock_insert.assert_any_call('U+1F0A1', 'ACE OF SPADES', memory_db)
+    mock_insert.assert_any_call('U+1F0B8', 'EIGHT OF CLUBS', memory_db)
+    mock_insert.assert_any_call('U+1F0C1', 'ACE OF DIAMONDS', memory_db)

@@ -1,6 +1,5 @@
-import sqlite3
-db="cards.db"
-# converts word form to code form
+from connection import get_connection
+# converts word form to code form (Ex. KING OF SPADE->KS)
 def get_code(name):
     value_to_code = {
         "ACE": "A", "KING": "K", "QUEEN": "Q", "JACK": "J",
@@ -13,22 +12,21 @@ def get_code(name):
     value, suit = name.split(" OF ")
     return value_to_code[value] + suit_to_code[suit]
 
-# converts code form back to word form
+# converts code form back to word form (Ex. KS->King Of Spades)
 def code_to_words(code):
-    conn = sqlite3.connect(db)
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM cards WHERE code = ?", (code,))
     result = cursor.fetchone()
-    conn.close()
     return result[0].title()
 
-# converts symbol code to letter code
+# converts symbol code to letter code (Ex. 2♡->2H)
 def get_card_code(value, suit):
     suit_dict = {'♤': 'S', '♡': 'H', '♢': 'D', '♧': 'C'}
     # build guess
     return value + suit_dict[suit]
 
-# converts a letter code to symbol code
+# converts a letter code to symbol code (Ex. 2H->2♡)
 def codes_to_symbols(card_codes):
     reverse_suit_dict = {'S': '♤', 'H': '♡', 'D': '♢', 'C': '♧'}
     card_symbols = []

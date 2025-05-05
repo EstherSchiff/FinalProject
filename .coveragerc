@@ -1,2 +1,2 @@
 [run]
-include=tests/*
+omit=tests/*,*/site-packages/*,*/dist-packages/*,

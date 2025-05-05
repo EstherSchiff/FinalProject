@@ -41,7 +41,7 @@ def extract_data(table):
     return cards_data
 
 # inserts the extracted data into the database
-def insert_data(cards_data):
+def insert_data(cards_data, conn):
     for card in cards_data:
         unicode, name = card
-        insert_card(unicode, name)
+        insert_card(unicode, name, conn)

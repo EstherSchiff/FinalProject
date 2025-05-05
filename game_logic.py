@@ -1,9 +1,12 @@
 import streamlit as st
-from database import init_db, reset_db, update_card, get_guessed_cards
+from database import init_db, reset_db, update_card, get_guessed_cards, update_stat_count
 from scrape import scrape_cards
 from api import get_secret_card
 from ai import encourage
 from card_helpers import codes_to_symbols, get_card_code, code_to_words
+from stats import game_stats
+
+total_guesses = 5
 
 # displays guessed cards
 def display_data():
@@ -19,12 +22,14 @@ def display_data():
 def win():
     st.session_state["guess_disabled"] = True
     st.session_state["win_message"] = "You guessed it! Press New Game to play again."
+    update_stat_count('win')
     st.rerun()
 
 # called when the user runs out of guesses
 def lose():
     st.session_state["guess_disabled"] = True
     st.session_state["lose_message"] = f'You ran out of guesses! The card was {code_to_words(st.session_state["secret_card"])}. Press New Game to play again.'
+    update_stat_count('lose')
     st.rerun()
 
 # loads the sidebar to enter a guess
@@ -59,7 +64,6 @@ def reset_game():
 
 # called if user guesses incorrectly, but still has remaining guesses
 def continue_game(card_code):
-    # st.write(st.session_state["secret_card"])  # JUST FOR DEBUGGING!
     update_card(1, card_code)  # mark as guessed
     st.session_state["guesses_left"] -= 1
 
@@ -69,10 +73,10 @@ def ai():
         st.write(encourage(st.session_state["guesses_left"]))
 
 def calc_used_guesses():
-    return 5 - st.session_state["guesses_left"]
+    return total_guesses - st.session_state["guesses_left"]
 
 def calc_progress_fraction(used):
-    return used / 5
+    return used / total_guesses
 
 # displays a progress bar showing how far the game progressed
 def progress_bar():
@@ -85,6 +89,11 @@ def progress_bar():
         st.session_state["progress"] = progress  # Store the progress in session state
         with col2:
             st.progress(st.session_state["progress"])
+
+def show_game_stats():
+    plot = game_stats()
+    with st.expander("See Game Stats"):
+        st.pyplot(plot)
 
 # initializes session state variables
 def initialize_game():
@@ -108,9 +117,6 @@ def initialize_game():
 
     if "guess_disabled" not in st.session_state:
         st.session_state["guess_disabled"] = False
-
-    if "launched" not in st.session_state:
-        st.session_state["launched"] = True
 
 # displays a winning or losing message or the cards already guessed
 def display_messages():

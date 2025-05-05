@@ -1,8 +1,8 @@
-streamlit
-pandas
-openai
-requests
 beautifulsoup4
-pytest-cov
+emoji
+openai
 pytest
+pytest-cov
 pytest-mock
+requests
+streamlit

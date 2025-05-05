@@ -1,50 +1,67 @@
-import sqlite3
+from connection import get_connection
 from card_helpers import get_code
-db = "cards.db"
 
-# Database setup
+# set up table
 def init_db():
-    conn = sqlite3.connect(db)
+    conn = get_connection()
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS cards (
                     code TEXT UNIQUE,
                     unicode TEXT UNIQUE,
                     name TEXT,
                     guessed BOOL DEFAULT 0)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS stats (
+                    name TEXT PRIMARY KEY,
+                    count INTEGER DEFAULT 0)''')
+    c.execute("INSERT OR IGNORE INTO stats (name, count) VALUES ('win', 0)")
+    c.execute("INSERT OR IGNORE INTO stats (name, count) VALUES ('lose', 0)")
     conn.commit()
-    conn.close()
+    # return conn
+
+def get_count():
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("SELECT count FROM stats")
+    return c.fetchall()
+
+def update_stat_count(count_type):
+    if count_type not in ['win', 'lose']:
+        raise Exception("You can only pass win or lose as a count type.")
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute(f"UPDATE stats SET count = count + 1 WHERE name = ?", (count_type,))
+    conn.commit()
 
 # insert a card into the database
-def insert_card(unicode, name, db_name=db):
-    conn = sqlite3.connect(db_name)
+def insert_card(unicode, name, conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     code = get_code(name)
     c.execute("INSERT OR IGNORE INTO cards (code, unicode, name) VALUES (?,?,?)",
               (code, unicode, name))
     conn.commit()
-    conn.close()
 
 # Update if card was chosen
-def update_card(guessed, code):
-    conn = sqlite3.connect(db)
+def update_card(guessed, code, conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     c.execute("UPDATE cards SET guessed = ? WHERE code = ?", (guessed, code))
     conn.commit()
-    conn.close()
 
 # set all card's guessed to false for new game
 def reset_db():
-    conn = sqlite3.connect(db)
+    conn = get_connection()
     c = conn.cursor()
     c.execute("UPDATE cards SET guessed = 0")
     conn.commit()
-    conn.close()
 
 # returns all guessed cards
-def get_guessed_cards():
-    conn = sqlite3.connect(db)
+def get_guessed_cards(conn=None):
+    if conn is None:
+        conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT code FROM cards WHERE guessed == 1")
     rows = cursor.fetchall()
-    conn.close()
     return [row[0] for row in rows]
