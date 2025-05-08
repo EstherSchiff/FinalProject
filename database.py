@@ -2,8 +2,9 @@ from connection import get_connection
 from card_helpers import get_code
 
 # set up table
-def init_db():
-    conn = get_connection()
+def init_db(conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS cards (
                     code TEXT UNIQUE,
@@ -16,18 +17,19 @@ def init_db():
     c.execute("INSERT OR IGNORE INTO stats (name, count) VALUES ('win', 0)")
     c.execute("INSERT OR IGNORE INTO stats (name, count) VALUES ('lose', 0)")
     conn.commit()
-    # return conn
 
-def get_count():
-    conn = get_connection()
+# gets the counts of win and lose as a list of tuples
+def get_count(conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     c.execute("SELECT count FROM stats")
     return c.fetchall()
 
-def update_stat_count(count_type):
-    if count_type not in ['win', 'lose']:
-        raise Exception("You can only pass win or lose as a count type.")
-    conn = get_connection()
+# updates the win or lose count
+def update_stat_count(count_type, conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     c.execute(f"UPDATE stats SET count = count + 1 WHERE name = ?", (count_type,))
     conn.commit()
@@ -51,8 +53,9 @@ def update_card(guessed, code, conn=None):
     conn.commit()
 
 # set all card's guessed to false for new game
-def reset_db():
-    conn = get_connection()
+def reset_db(conn=None):
+    if conn is None:
+        conn = get_connection()
     c = conn.cursor()
     c.execute("UPDATE cards SET guessed = 0")
     conn.commit()

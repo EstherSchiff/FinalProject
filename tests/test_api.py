@@ -53,6 +53,7 @@ def mock_requests_get(mocker):
     """
     return mocker.patch("requests.get")
 
+# test ensures deck is created with proper api call
 def test_create_deck(simple_api_response, mock_requests_get):
     mock_response = Mock()
     mock_response.status_code = 200
@@ -60,10 +61,9 @@ def test_create_deck(simple_api_response, mock_requests_get):
     mock_requests_get.return_value = mock_response
     deck_id = create_deck()
     assert deck_id == simple_api_response["deck_id"]
-    mock_requests_get.assert_called_once_with(
-        # call api once with this link
-        "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1", timeout=60)
+    mock_requests_get.assert_called_once_with("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1", timeout=60)
 
+# test checks that an error is raised if the api request fails
 def test_create_deck_err(fail_api_response, mock_requests_get):
     mock_response = Mock()
     mock_response.status_code = 400
@@ -72,6 +72,7 @@ def test_create_deck_err(fail_api_response, mock_requests_get):
     with pytest.raises(CreateDeckError):
         create_deck()
 
+# test checks successful draw cards
 def test_draw_cards(card_api_response, mock_requests_get):
     mock_response = Mock()
     mock_response.status_code = 200
@@ -81,6 +82,7 @@ def test_draw_cards(card_api_response, mock_requests_get):
     cards = draw_cards(deck_id)
     assert cards.json() == card_api_response
 
+# test checks that error is raised when api gives an error
 def test_draw_cards_err(card_api_response_err, mock_requests_get):
     mock_response = Mock()
     mock_response.status_code = 400
@@ -90,6 +92,7 @@ def test_draw_cards_err(card_api_response_err, mock_requests_get):
     with pytest.raises(DrawCardError):
         draw_cards(deck_id)
 
+# test checks that it gets a secret card
 def test_get_secret_card(card_api_response, mock_requests_get):
     mock_response = Mock()
     mock_response.status_code = 200

@@ -51,19 +51,17 @@ def test_get_html_success(mocker, mock_html):
     assert result == mock_response.text
     assert mock_response.status_code == 200
 
+# ensure an error is raised since status code failed
 def test_get_html_fail(mocker, mock_html):
-    # Create a mock response object
     mock_response = mocker.Mock()
     mock_response.status_code = 400
     mock_response.raise_for_status.side_effect = requests.HTTPError
     mock_response.text = mock_html
-
-    # Mock requests.get to return the mock response
     mocker.patch('requests.get', return_value=mock_response)
-
     with pytest.raises(URLError):
         get_html()
 
+# ensures table is scraped from wikipedia
 def test_get_table_success(mocker, mock_html):
     mocker.patch("scrape.get_html", return_value=mock_html)
     table = get_table(mock_html)
@@ -71,6 +69,7 @@ def test_get_table_success(mocker, mock_html):
     assert "wikitable" in table["class"]
     assert "🂡" in table.find("td").text
 
+# ensures that nothing is returned if get table is given invalid html
 def test_get_table_fail(mocker):
     invalid_html = """
     <html>
@@ -83,6 +82,7 @@ def test_get_table_fail(mocker):
     table = get_table(invalid_html)
     assert table is None
 
+# ensures only specific data is extracted from the table
 @pytest.mark.parametrize("keyword", ["Reserved", "TRUMP", "FOOL", "JOKER", "BACK", "KNIGHT"])
 def test_extract_data(mocker, mock_html, keyword):
     mocker.patch("scrape.get_html", return_value=mock_html)
@@ -90,6 +90,7 @@ def test_extract_data(mocker, mock_html, keyword):
     result = extract_data(table)
     assert keyword not in result
 
+# ensures cards that were scraped are inserted into the db
 def test_insert_data(memory_db):
     cards_data = [
         ('U+1F0C2', 'TWO OF DIAMONDS'),
@@ -101,7 +102,7 @@ def test_insert_data(memory_db):
         assert ('U+1F0C2', 'TWO OF DIAMONDS') in guessed_values
         assert ('U+1F0C3', 'THREE OF DIAMONDS') in guessed_values
 
-
+# ensures all steps to scrape wikipedia are completed
 @patch('scrape_helpers.insert_card')
 @patch('scrape.get_html', return_value=mock_html)
 @patch('scrape.get_table', return_value=mock_table)

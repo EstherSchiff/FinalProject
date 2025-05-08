@@ -60,7 +60,7 @@ API_KEY = "addkeyhere"
 `pytest-cov`- pytest plug-in for coverage reports  
 `pytest-mock`- mocking in test  
 `requests`- handles HTTP requests  
-`streamlit`- web application framwork  
+`streamlit`- web application framework  
 
 **To install:**
 ```bash
